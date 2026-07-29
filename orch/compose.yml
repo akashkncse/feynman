@@ -1,0 +1,13 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: feynman_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: orchestration_db
+    volumes:
+      - mongo_data:/data/db
+volumes:
+  mongo_data:
