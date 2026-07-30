@@ -13,13 +13,12 @@ import retrofit2.http.Multipart
 import java.io.File
 
 data class UploadMetaData(
-    val sessionId:String,
-    val dept:String,
-    val year:String,
+    val year:Int,
+    val dep:String,
     val section:String,
     val date:String,
-    val startTime:Long,
-    val endTime:Long?
+    val starttime: Long,
+    val endtime: Long?
 )
 class UploadManager {
     private val gson = GsonBuilder().create()
@@ -37,7 +36,7 @@ class UploadManager {
             return
         }
         val audioRequestBody = audioFile.asRequestBody("audio/mp4".toMediaTypeOrNull())
-        val audioPart = MultipartBody.Part.createFormData("audio", audioFile.name, audioRequestBody)
+        val audioPart = MultipartBody.Part.createFormData("file", audioFile.name, audioRequestBody)
 
         val slidesDir = File(sessionDir, "slides")
         val imageParts = mutableListOf<MultipartBody.Part>()

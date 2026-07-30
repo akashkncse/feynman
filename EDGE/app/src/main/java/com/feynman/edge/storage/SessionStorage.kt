@@ -21,10 +21,10 @@ class SessionStorage(context: Context){
     private val audioStorage= AudioStorage()
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
-    fun saveSession(session: LectureSession):File{
+    fun saveSession(session: LectureSession,width:Int,height:Int):File{
         val sessionDir=FileManager.getSessionDir(session.sessionId)
         val slidesDir= FileManager.getSlidesDir(session.sessionId)
-        slideStorage.saveSlides(session.slides,slidesDir)
+        slideStorage.saveSlides(session.slides,slidesDir,width,height)
         audioStorage.saveAudio(session.audio,sessionDir)
         val metadata= SessionMetaData(
             sessionId = session.sessionId,

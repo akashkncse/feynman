@@ -10,10 +10,10 @@ import retrofit2.http.Part
 interface LectureApiService{
 
     @Multipart
-    @POST("api/orch")
+    @POST("orch")
     fun uploadLecture(
-        @Part("metadata") metadata: RequestBody,
-        @Part audio: MultipartBody.Part,
+        @Part("data") metadata: RequestBody,
+        @Part file: MultipartBody.Part,
         @Part images:List<MultipartBody.Part>
     ): Call<okhttp3.ResponseBody>
 }

@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleEndRecording() {
-        val session = sessionManager.endLecture()
+        val session = sessionManager.endLecture(canvasView.width, canvasView.height)
 
         canvasView.engine.resetAllSlides()
         canvasView.locked = true
@@ -116,14 +116,17 @@ class MainActivity : AppCompatActivity() {
 
         if (session != null) {
             val sessionDir = java.io.File(filesDir, "sessions/${session.sessionId}")
+
+            val dateFormatted = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
+                .format(java.util.Date(session.startTime))
+
             val uploadMetadata = com.feynman.edge.network.UploadMetaData(
-                sessionId = session.sessionId,
-                dept = session.dept,
-                year = session.year,
+                year = session.year.toIntOrNull() ?: 0,
+                dep = session.dept,
                 section = session.section,
-                date = session.date,
-                startTime = session.startTime,
-                endTime= session.endTime
+                date = dateFormatted,
+                starttime = session.startTime,
+                endtime = session.endTime
             )
 
             com.feynman.edge.network.UploadManager().uploadSession(

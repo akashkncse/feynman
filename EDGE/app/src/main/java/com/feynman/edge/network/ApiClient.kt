@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiClient{
-    private const val URL="https://10.0.2.2:8080/"
+    private const val URL="http://10.143.108.57:8080/"
     private val okHttpClient= OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)

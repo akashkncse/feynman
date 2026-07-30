@@ -15,7 +15,10 @@ class LectureSessionManager (
 
     fun getState(): SessionState=state
     fun startLecture(dept:String,year: String,section:String){
-        if(state!= SessionState.IDLE) return
+        if(state!= SessionState.IDLE) {
+            android.util.Log.w("FeynmanDebug", "startLecture blocked, state=$state")
+            return
+        }
         val now=System.currentTimeMillis()
         currSession = LectureSession(
             sessionId = UUID.randomUUID().toString(),
@@ -29,7 +32,7 @@ class LectureSessionManager (
         state = SessionState.RECORDING
         recordingService.startRecording()
     }
-    fun endLecture(): LectureSession?{
+    fun endLecture(width:Int,height:Int): LectureSession?{
         if(state!= SessionState.RECORDING) return null
         val session=currSession?:return null
         session.endTime=System.currentTimeMillis()
@@ -37,8 +40,16 @@ class LectureSessionManager (
         for(i in 0 until whiteBoardEngine.getSlideCount()){
             session.slides.add(whiteBoardEngine.getSlideAt(i))
         }
+        android.util.Log.d("FeynmanDebug", "Saving session id=${session.sessionId}, slides=${session.slides.size}")
         session.audio=recordingService.endRecording()
-        sessionStorage.saveSession(session)
+        try {
+            sessionStorage.saveSession(session,width,height)
+            android.util.Log.d("FeynmanDebug", "Save SUCCESS for id=${session.sessionId}")
+        } catch (e: Exception) {
+            android.util.Log.e("FeynmanDebug", "Save FAILED for id=${session.sessionId}", e)
+        }
+
+
         state= SessionState.STOPPED
         return session
     }
